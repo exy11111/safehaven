@@ -1,0 +1,12 @@
+<resources>
+    <style name="BottomNavStyle" parent="Widget.MaterialComponents.BottomNavigationView">
+        <!-- Change the item icon color to accent color -->
+        <item name="itemIconTint">@color/rosyRed</item>
+
+        <!-- Change the item text color to accent color -->
+        <item name="itemTextColor">@color/rosyRed</item>
+
+        <!-- Optional: Change the background color of the BottomNavigationView -->
+        <item name="android:background">@color/white</item>
+    </style>
+</resources>

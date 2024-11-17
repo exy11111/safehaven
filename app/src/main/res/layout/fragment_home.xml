@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/pink"
+    tools:context=".HomeFragment">
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <!-- my status -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="20dp"
+                            android:textStyle="bold"
+                            android:textSize="24dp"
+                            android:text="My Status"
+                            android:textColor="@color/black"/>
+
+                        <include
+                            android:id="@+id/cardRestingStatus"
+                            android:clickable="true"
+                            android:focusable="true"
+                            layout="@layout/card_restingstatus" />
+
+                        <include layout="@layout/card_energylevel" />
+
+                        <include layout="@layout/card_moodlevel"/>
+
+                        <include layout="@layout/card_anxietylevel"/>
+
+                    </LinearLayout>
+
+
+                    <!-- babi status -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="20dp"
+                            android:textStyle="bold"
+                            android:textSize="24dp"
+                            android:text="Babi's Status"
+                            android:textColor="@color/black"/>
+
+                        <include
+                            android:id="@+id/partnerRestingStatus"
+                            layout="@layout/card_restingstatus" />
+
+                        <include layout="@layout/card_energylevel" />
+
+                        <include layout="@layout/card_moodlevel"/>
+
+                        <include layout="@layout/card_anxietylevel"/>
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+
+        </ScrollView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+
+
+
+</FrameLayout>

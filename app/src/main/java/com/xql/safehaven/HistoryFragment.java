@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,8 +54,21 @@ public class HistoryFragment extends Fragment {
         else{
             userId = currentUser.getUid();
         }
+        fetchLogs();
 
-        db.collection("logs").orderBy("datetime", Query.Direction.DESCENDING).get().addOnCompleteListener(task -> {
+        binding.swipeRefreshLayout.setOnRefreshListener(() -> {
+            binding.parentLayout.removeAllViews();
+            fetchLogs();
+            new Handler().postDelayed(() -> {
+                binding.swipeRefreshLayout.setRefreshing(false);
+            }, 2000);
+        });
+
+        return binding.getRoot();
+    }
+
+    private void fetchLogs(){
+        db.collection("logs").orderBy("datetime", Query.Direction.DESCENDING).limit(50).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 QuerySnapshot querySnapshot = task.getResult();
                 for (DocumentSnapshot document : querySnapshot) {
@@ -68,12 +82,45 @@ public class HistoryFragment extends Fragment {
                         Timestamp datetime = document.getTimestamp("datetime");
                         addRestLogCardToLayout(restStatus, restNote, datetime, logId);
                     }
+                    else if(category != null && category.equals("energy")){
+                        Long progressPlaceholder = document.getLong("energyProgress");
+                        int progress = 0;
+                        if(progressPlaceholder != null){
+                            progress = progressPlaceholder.intValue();
+                        }
+                        String note = document.getString("energyNote");
+                        String logId = document.getString("userId");
+                        Timestamp datetime = document.getTimestamp("datetime");
+                        addProgressToLayout(category, progress, note, logId, datetime);
+                    }
 
                 }
             }
         });
+    }
 
-        return binding.getRoot();
+    private void addProgressToLayout(String category, int progress, String note, String logId, Timestamp datetime){
+        CardHistoryBinding cardBinding = CardHistoryBinding.inflate(LayoutInflater.from(getContext()), binding.parentLayout, false);
+
+        if(category.equals("energy")){
+            cardBinding.category.setImageResource(R.drawable.battery_heart_variant);
+            cardBinding.categoryLabel.setText("Keribels pa ba?: ");
+            cardBinding.categoryValue.setText(String.valueOf(progress)+"%");
+            if(logId.equals(userId)){
+                cardBinding.user.setText("You");
+            }
+            else{
+                cardBinding.user.setText("Babi");
+            }
+            cardBinding.note.setText("\""+note+"\"");
+            Date date = datetime.toDate();
+            SimpleDateFormat formatter = new SimpleDateFormat("MMMM d, yyyy h:mma", Locale.getDefault());
+            String formattedDate = formatter.format(date).toLowerCase();
+            String capitalizedDate = formattedDate.substring(0, 1).toUpperCase() + formattedDate.substring(1);
+            cardBinding.datetime.setText(capitalizedDate);
+        }
+
+        binding.parentLayout.addView(cardBinding.getRoot());
     }
 
     private void addRestLogCardToLayout(String restStatus, String restNote, Timestamp datetime, String logId) {
@@ -107,5 +154,11 @@ public class HistoryFragment extends Fragment {
         cardBinding.datetime.setText(capitalizedDate);
 
         binding.parentLayout.addView(cardBinding.getRoot());
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

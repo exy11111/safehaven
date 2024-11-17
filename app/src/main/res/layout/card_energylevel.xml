@@ -10,7 +10,8 @@
     app:cardBackgroundColor="@color/white"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?attr/selectableItemBackground">
+    android:foreground="?attr/selectableItemBackground"
+    android:id="@+id/main">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -35,38 +36,41 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:text="Energy level:"
+                android:text="Keribels pa ba?"
                 android:textColor="@color/black"/>
         </LinearLayout>
 
 
 
         <ProgressBar
+            android:id="@+id/energyProgressBar"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:max="100"
-            android:progress="80"
+            android:progress="0"
             style="@android:style/Widget.ProgressBar.Horizontal"
             android:layout_gravity="center"
             android:progressTint="@color/pink"
             android:layout_marginTop="10dp"/>
 
         <TextView
+            android:id="@+id/energyProgessText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textSize="14sp"
-            android:text="80%"
-            android:textColor="@color/black"/>
+            android:text="Loading..."
+            android:textColor="@color/black"
+            android:textSize="14sp" />
 
         <TextView
+            android:id="@+id/note"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:textSize="10sp"
-            android:text="'Lorem ipsum'"
-            android:textColor="@color/black"/>
+            android:text="Loading note..."
+            android:textColor="@color/black"
+            android:textSize="10sp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -78,11 +82,12 @@
             android:textColor="@color/black"/>
 
         <TextView
+            android:id="@+id/energyUpdate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:textSize="10sp"
-            android:text="November 16, 2024 9:00pm" />
+            android:text="Loading..." />
 
     </LinearLayout>
 

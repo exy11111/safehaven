@@ -26,30 +26,40 @@
                 android:layout_gravity="center">
 
                 <ImageView
+                    android:id="@+id/titleIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="2dp"
-                    android:src="@drawable/bed_clock" />
+                    android:src="@drawable/battery_heart_variant"
+                    android:layout_marginEnd="2dp"/>
 
                 <TextView
+                    android:id="@+id/titleText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
                     android:textSize="24sp"
-                    android:text="Resting status"
+                    android:text="Energy Level"
                     android:textColor="@color/black"/>
 
             </LinearLayout>
 
-            <Switch
-                android:layout_marginTop="5dp"
-                android:id="@+id/switchSleep"
+
+            <SeekBar
+                android:id="@+id/seekBar"
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Asleep"
-                android:thumbTint="@color/rosyRed"
-                android:textColor="@color/black"
-                android:checked="false" />
+                android:progressTint="@color/rosyRed"
+                android:max="100"
+                android:progress="50" />
+
+            <TextView
+                android:id="@+id/progressText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Energy Level: 50%"
+                android:textColor="@color/black"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout"

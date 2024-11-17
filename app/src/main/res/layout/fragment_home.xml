@@ -46,15 +46,19 @@
 
                         <include
                             android:id="@+id/cardRestingStatus"
-                            android:clickable="true"
-                            android:focusable="true"
                             layout="@layout/card_restingstatus" />
 
-                        <include layout="@layout/card_energylevel" />
+                        <include
+                            android:id="@+id/cardEnergyLevel"
+                            layout="@layout/card_energylevel" />
+
+                        <!--
 
                         <include layout="@layout/card_moodlevel"/>
 
                         <include layout="@layout/card_anxietylevel"/>
+
+                        -->
 
                     </LinearLayout>
 
@@ -81,11 +85,17 @@
                             android:id="@+id/partnerRestingStatus"
                             layout="@layout/card_restingstatus" />
 
-                        <include layout="@layout/card_energylevel" />
+                        <include
+                            android:id="@+id/partnerEnergyLevel"
+                            layout="@layout/card_energylevel" />
+
+                        <!--
 
                         <include layout="@layout/card_moodlevel"/>
 
                         <include layout="@layout/card_anxietylevel"/>
+
+                        -->
 
 
                     </LinearLayout>

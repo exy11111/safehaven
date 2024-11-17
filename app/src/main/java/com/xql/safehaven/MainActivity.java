@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 binding.loginExy.setVisibility(View.VISIBLE);
                 binding.progressBar.setVisibility(View.GONE);
                 startActivity(intent);
+                finish();
             }
             else{
                 Toast.makeText(this, "Unexpected error. Please try again.", Toast.LENGTH_SHORT).show();

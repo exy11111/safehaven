@@ -34,18 +34,22 @@ public class HomepageActivity extends AppCompatActivity {
             loadFragment(new HomeFragment());
         }
 
+        final long[] lastClickedTime = {0};
         binding.bottomNav.setOnNavigationItemSelectedListener(item -> {
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - lastClickedTime[0] < 1000) {
+                return false;
+            }
+            lastClickedTime[0] = currentTime;
+
             Fragment selectedFragment = null;
-            if(item.getItemId() == R.id.nav_home){
+            if (item.getItemId() == R.id.nav_home) {
                 selectedFragment = new HomeFragment();
-            }
-            else if(item.getItemId() == R.id.nav_history){
+            } else if (item.getItemId() == R.id.nav_history) {
                 selectedFragment = new HistoryFragment();
-            }
-            else if(item.getItemId() == R.id.nav_notes){
+            } else if (item.getItemId() == R.id.nav_notes) {
                 selectedFragment = new HomeFragment();
-            }
-            else if(item.getItemId() == R.id.nav_profile){
+            } else if (item.getItemId() == R.id.nav_profile) {
                 selectedFragment = new HomeFragment();
             }
 

@@ -25,10 +25,13 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.xql.safehaven.databinding.CardEnergylevelBinding;
 import com.xql.safehaven.databinding.CardRestingstatusBinding;
+import com.xql.safehaven.databinding.CardWydBinding;
 import com.xql.safehaven.databinding.DialogProgressbarBinding;
 import com.xql.safehaven.databinding.DialogRestingstatusBinding;
+import com.xql.safehaven.databinding.DialogWydBinding;
 import com.xql.safehaven.databinding.FragmentHomeBinding;
 
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -42,9 +45,9 @@ public class HomeFragment extends Fragment {
     FirebaseFirestore db;
     FirebaseUser currentUser;
     String userId;
-    String myRestStatus, myRestNote, myEnergyNote;
+    String myRestStatus, myRestNote, myEnergyNote, myWydNote;
     Long myEnergyProgress;
-    Timestamp myRestUpdate, myEnergyUpdate;
+    Timestamp myRestUpdate, myEnergyUpdate, myWydUpdate;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -70,6 +73,7 @@ public class HomeFragment extends Fragment {
         CardRestingstatusBinding cardRestingstatusBinding = CardRestingstatusBinding.bind(binding.getRoot().findViewById(R.id.cardRestingStatus));
         CardRestingstatusBinding partnerRestingstatusBinding = CardRestingstatusBinding.bind(binding.getRoot().findViewById(R.id.partnerRestingStatus));
         CardEnergylevelBinding cardEnergylevelBinding = CardEnergylevelBinding.bind(binding.getRoot().findViewById(R.id.cardEnergyLevel));
+        CardWydBinding cardWydBinding = CardWydBinding.bind(binding.getRoot().findViewById(R.id.cardWyd));
 
         fetchMyStatus();
 
@@ -78,6 +82,9 @@ public class HomeFragment extends Fragment {
         });
         cardEnergylevelBinding.main.setOnClickListener(v -> {
             showProgressDialog(userId, "energy");
+        });
+        cardWydBinding.main.setOnClickListener(v -> {
+            showWydDialog();
         });
 
         binding.swipeRefreshLayout.setOnRefreshListener(() -> {
@@ -170,6 +177,22 @@ public class HomeFragment extends Fragment {
                     binding.cardEnergyLevel.note.setVisibility(View.GONE);
                 }
 
+                String wydNote = document.getString("wydNote");
+                Timestamp wydUpdate = document.getTimestamp("wydUpdate");
+                if(wydNote != null){
+                    myWydNote = wydNote;
+                    binding.cardWyd.note.setText("\""+wydNote+"\"");
+                }
+                if(wydUpdate != null){
+                    myWydUpdate = wydUpdate;
+                    Date date = wydUpdate.toDate();
+                    SimpleDateFormat formatter = new SimpleDateFormat("MMMM d, yyyy h:mma", Locale.getDefault());
+                    String formattedDate = formatter.format(date).toLowerCase();
+                    String capitalizedDate = formattedDate.substring(0, 1).toUpperCase() + formattedDate.substring(1);
+
+                    binding.cardWyd.wydUpdate.setText(capitalizedDate);
+                }
+
                 fetchPartner(partnerId);
 
             }
@@ -245,6 +268,19 @@ public class HomeFragment extends Fragment {
                 }
                 else{
                     binding.partnerEnergyLevel.note.setVisibility(View.GONE);
+                }
+
+                String wydNote = document.getString("wydNote");
+                Timestamp wydUpdate = document.getTimestamp("wydUpdate");
+                if(wydNote != null){
+                    binding.partnerWyd.note.setText("\""+wydNote+"\"");
+                }
+                if(wydUpdate != null){
+                    Date date = wydUpdate.toDate();
+                    SimpleDateFormat formatter = new SimpleDateFormat("MMMM d, yyyy h:mma", Locale.getDefault());
+                    String formattedDate = formatter.format(date).toLowerCase();
+                    String capitalizedDate = formattedDate.substring(0, 1).toUpperCase() + formattedDate.substring(1);
+                    binding.partnerWyd.wydUpdate.setText(capitalizedDate);
                 }
 
             }
@@ -330,7 +366,6 @@ public class HomeFragment extends Fragment {
 
 
     }
-
     private void showProgressDialog(String userId, String category){
         DialogProgressbarBinding binding = DialogProgressbarBinding.inflate(getLayoutInflater());
 
@@ -410,6 +445,49 @@ public class HomeFragment extends Fragment {
 
         dialog.show();
     }
+
+    private void showWydDialog(){
+        DialogWydBinding binding = DialogWydBinding.inflate(getLayoutInflater());
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setView(binding.getRoot());
+        AlertDialog dialog = builder.create();
+
+        if(myWydNote != null && !myWydNote.isEmpty()){
+            binding.note.setText(myWydNote);
+        }
+
+        binding.confirm.setOnClickListener(v -> {
+            binding.progressBar.setVisibility(View.VISIBLE);
+
+            String wydNote = binding.note.getText().toString();
+            Timestamp wydUpdate = Timestamp.now();
+            submitWyd(wydNote, wydUpdate);
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
+
+    private void submitWyd(String wydNote, Timestamp wydUpdate){
+        Map<String, Object> status = new HashMap<>();
+        status.put("wydNote", wydNote);
+        status.put("wydUpdate", wydUpdate);
+
+        db.collection("status").document(userId).update(status).addOnSuccessListener(aVoid -> {
+            Map<String, Object> logs = new HashMap<>();
+            logs.put("userId", userId);
+            logs.put("datetime", wydUpdate);
+            logs.put("category", "wyd");
+            logs.put("wydNote", wydNote);
+            db.collection("logs").add(logs);
+
+            Toast.makeText(requireContext(), "Status saved successfully.", Toast.LENGTH_SHORT).show();
+        }).addOnFailureListener(e -> {
+            Toast.makeText(requireContext(), "Error updating status: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        });
+    }
+
+
 
     @Override
     public void onDestroyView() {

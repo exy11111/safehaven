@@ -93,6 +93,13 @@ public class HistoryFragment extends Fragment {
                         Timestamp datetime = document.getTimestamp("datetime");
                         addProgressToLayout(category, progress, note, logId, datetime);
                     }
+                    else if(category != null && category.equals("wyd")){
+                        String note = document.getString("wydNote");
+                        String logId = document.getString("userId");
+                        Timestamp datetime = document.getTimestamp("datetime");
+                        addProgressToLayout(category, 0, note, logId, datetime);
+
+                    }
 
                 }
             }
@@ -106,6 +113,23 @@ public class HistoryFragment extends Fragment {
             cardBinding.category.setImageResource(R.drawable.battery_heart_variant);
             cardBinding.categoryLabel.setText("Keribels pa ba?: ");
             cardBinding.categoryValue.setText(String.valueOf(progress)+"%");
+            if(logId.equals(userId)){
+                cardBinding.user.setText("You");
+            }
+            else{
+                cardBinding.user.setText("Babi");
+            }
+            cardBinding.note.setText("\""+note+"\"");
+            Date date = datetime.toDate();
+            SimpleDateFormat formatter = new SimpleDateFormat("MMMM d, yyyy h:mma", Locale.getDefault());
+            String formattedDate = formatter.format(date).toLowerCase();
+            String capitalizedDate = formattedDate.substring(0, 1).toUpperCase() + formattedDate.substring(1);
+            cardBinding.datetime.setText(capitalizedDate);
+        }
+        else if(category.equals("wyd")){
+            cardBinding.category.setImageResource(R.drawable.account_badge);
+            cardBinding.categoryLabel.setText("WYD?");
+            cardBinding.categoryValue.setVisibility(View.GONE);
             if(logId.equals(userId)){
                 cardBinding.user.setText("You");
             }

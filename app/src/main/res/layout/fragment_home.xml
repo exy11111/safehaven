@@ -45,6 +45,10 @@
                             android:textColor="@color/black"/>
 
                         <include
+                            android:id="@+id/cardWyd"
+                            layout="@layout/card_wyd" />
+
+                        <include
                             android:id="@+id/cardRestingStatus"
                             layout="@layout/card_restingstatus" />
 
@@ -80,6 +84,10 @@
                             android:textSize="24dp"
                             android:text="Babi's Status"
                             android:textColor="@color/black"/>
+
+                        <include
+                            android:id="@+id/partnerWyd"
+                            layout="@layout/card_wyd" />
 
                         <include
                             android:id="@+id/partnerRestingStatus"

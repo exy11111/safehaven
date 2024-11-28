@@ -50,7 +50,7 @@ public class HomepageActivity extends AppCompatActivity {
             } else if (item.getItemId() == R.id.nav_notes) {
                 selectedFragment = new HomeFragment();
             } else if (item.getItemId() == R.id.nav_profile) {
-                selectedFragment = new HomeFragment();
+                selectedFragment = new ProfileFragment();
             }
 
             return loadFragment(selectedFragment);

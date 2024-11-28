@@ -463,6 +463,7 @@ public class HomeFragment extends Fragment {
             Timestamp wydUpdate = Timestamp.now();
             submitWyd(wydNote, wydUpdate);
             dialog.dismiss();
+            fetchMyStatus();
         });
 
         dialog.show();

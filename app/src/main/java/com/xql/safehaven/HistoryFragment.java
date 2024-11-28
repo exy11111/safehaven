@@ -68,6 +68,7 @@ public class HistoryFragment extends Fragment {
     }
 
     private void fetchLogs(){
+        binding.progressBar.setVisibility(View.VISIBLE);
         db.collection("logs").orderBy("datetime", Query.Direction.DESCENDING).limit(50).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 QuerySnapshot querySnapshot = task.getResult();
@@ -102,6 +103,7 @@ public class HistoryFragment extends Fragment {
                     }
 
                 }
+                binding.progressBar.setVisibility(View.GONE);
             }
         });
     }
